@@ -120,13 +120,6 @@ public class ControladorDeportista implements Initializable {
         Parent root = null;
         try {
             root = loader.load();
-            // Obtener el controlador de la ventana modal
-            //AniadirControlador modalControlador = loader.getController();
-
-            // Pasar el TableView al controlador de la ventana modal
-            //modalControlador.setTablaPersonas(this.tablaPersonas);
-
-            // Crear y mostrar la ventana modal
             modalAniadir = new Stage();
             sceneAniadir = new Scene(root);
             modalAniadir.setScene(sceneAniadir);
@@ -138,7 +131,11 @@ public class ControladorDeportista implements Initializable {
             deportistas = DaoDeportista.cargarListado();
             tablaDeportistas.getItems().setAll(deportistas);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("FXML");
+            alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
+            alert.showAndWait();
         }
     }
 
