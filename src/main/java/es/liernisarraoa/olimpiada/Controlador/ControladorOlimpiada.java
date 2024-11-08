@@ -26,7 +26,7 @@ public class ControladorOlimpiada implements Initializable {
     public Label dia;
 
     public void cambiarDeportista(ActionEvent actionEvent) {
-        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/gestionDeportista.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Deportista/gestionDeportista.fxml"));
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load(), 767, 502);
@@ -51,6 +51,26 @@ public class ControladorOlimpiada implements Initializable {
     }
 
     public void cambiarEquipo(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Equipo/gestionEquipo.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load(), 767, 502);
+            stage.setTitle("Gestion de Equipos");
+            stage.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Equipos/icono.png"))));
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+
+            ControladorEquipo controladorEquipo = fxmlLoader.getController();
+            controladorEquipo.setStage(stage);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("FXML");
+            alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        }
     }
 
     public void cambiarEvento(ActionEvent actionEvent) {
@@ -60,7 +80,7 @@ public class ControladorOlimpiada implements Initializable {
     }
 
     public void cambiarOlimpiada(ActionEvent actionEvent) {
-        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/gestionOlimpiada.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Olimpiada/gestionOlimpiada.fxml"));
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load(), 767, 502);
@@ -78,7 +98,6 @@ public class ControladorOlimpiada implements Initializable {
             alert.setTitle("FXML");
             alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
             alert.showAndWait();
-            throw new RuntimeException(e);
         }
     }
 

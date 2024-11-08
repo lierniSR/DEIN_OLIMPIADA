@@ -85,6 +85,26 @@ public class ControladorDeportista implements Initializable {
     }
 
     public void cambiarEquipo(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Equipo/gestionEquipo.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load(), 767, 502);
+            stagePrimario.setTitle("Gestion de Equipos");
+            stagePrimario.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Equipos/icono.png"))));
+            stagePrimario.setResizable(false);
+            stagePrimario.setScene(scene);
+            stagePrimario.show();
+
+            ControladorEquipo controladorEquipo = fxmlLoader.getController();
+            controladorEquipo.setStage(stagePrimario);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("FXML");
+            alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        }
     }
 
     public void cambiarEvento(ActionEvent actionEvent) {
@@ -94,7 +114,7 @@ public class ControladorDeportista implements Initializable {
     }
 
     public void cambiarOlimpiada(ActionEvent actionEvent) {
-        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/gestionOlimpiada.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Olimpiada/gestionOlimpiada.fxml"));
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load(), 767, 502);
@@ -112,7 +132,6 @@ public class ControladorDeportista implements Initializable {
             alert.setTitle("FXML");
             alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
             alert.showAndWait();
-            throw new RuntimeException(e);
         }
     }
 
@@ -139,7 +158,7 @@ public class ControladorDeportista implements Initializable {
     public void aniadirDeportista(ActionEvent actionEvent) {
         //Esto si el controlador necesita hacer algo en la ventana principal
         // Cargar el FXML de la ventana modal
-        FXMLLoader loader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/aniadirDepor.fxml"));
+        FXMLLoader loader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Deportista/aniadirDepor.fxml"));
         Parent root = null;
         try {
             root = loader.load();
@@ -177,7 +196,7 @@ public class ControladorDeportista implements Initializable {
         } else {
             //Esto si el controlador necesita hacer algo en la ventana principal
             // Cargar el FXML de la ventana modal
-            FXMLLoader loader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/modificarDepor.fxml"));
+            FXMLLoader loader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Deportista/modificarDepor.fxml"));
             Parent root = null;
             try {
                 root = loader.load();

@@ -65,7 +65,7 @@
                   <Insets left="50.0" top="20.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#eliminarDeportista" text="ELIMINAR">
+            <Button mnemonicParsing="false" onAction="#eliminarOlimpiada" text="ELIMINAR">
                <HBox.margin>
                   <Insets left="50.0" top="20.0" />
                </HBox.margin>
