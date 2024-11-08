@@ -94,7 +94,6 @@ public class DaoOlimpiada {
                 alert.setTitle("SQL");
                 alert.setContentText("No se ha podido ejecutar la sentencia.");
                 alert.showAndWait();
-                throw new RuntimeException(e);
             }
         return lineas > 0;
         }

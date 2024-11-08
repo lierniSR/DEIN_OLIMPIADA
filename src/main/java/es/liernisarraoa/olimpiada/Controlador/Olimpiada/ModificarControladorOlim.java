@@ -96,7 +96,7 @@ public class ModificarControladorOlim implements Initializable {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setHeaderText(null);
         alert.setTitle("Error");
-        alert.setContentText("Deportista duplicado");
+        alert.setContentText("Olimpiada duplicada");
         alert.showAndWait();
     }
 
@@ -115,11 +115,5 @@ public class ModificarControladorOlim implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ObservableList<String> opciones = FXCollections.observableArrayList("Summer", "Winter");
         seleccionadorTemporada.setItems(opciones);
-        if(o != null){
-            nombreText.setText(this.o.getNombre());
-            anioText.setText(String.valueOf(this.o.getAnio()));
-            seleccionadorTemporada.setValue(this.o.getTemporada());
-            ciudadText.setText(String.valueOf(this.o.getCiudad()));
-        }
     }
 }

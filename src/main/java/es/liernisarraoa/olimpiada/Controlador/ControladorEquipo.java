@@ -187,38 +187,57 @@ public class ControladorEquipo implements Initializable {
     }
 
     public void modificarEquipo(ActionEvent actionEvent) {
-        //Esto si el controlador necesita hacer algo en la ventana principal
-        // Cargar el FXML de la ventana modal
-        FXMLLoader loader =  new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Equipo/modificarEquipo.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-            modalAniadir = new Stage();
-            sceneAniadir = new Scene(root);
-            // Obtener el controlador de la ventana modal
-            ModificarControlador modalControlador = loader.getController();
-
-            // Pasar el TableView al controlador de la ventana modal
-            modalControlador.setTablaEquipo(this.tablaEquipos);
-            modalAniadir.setScene(sceneAniadir);
-            modalAniadir.initModality(Modality.APPLICATION_MODAL);
-            modalAniadir.setTitle("Modificar Equipo");
-            modalAniadir.setResizable(false);
-            modalAniadir.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Equipos/icono.png"))));
-            modalAniadir.showAndWait();
-            equipos = DaoEquipo.cargarListado();
-            tablaEquipos.getItems().setAll(equipos);
-        } catch (IOException e) {
+        if(tablaEquipos.getSelectionModel().getSelectedItem() == null){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
-            alert.setTitle("FXML");
-            alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
+            alert.setTitle("Seleccion");
+            alert.setContentText("No se ha seleccionado ningun registro.");
             alert.showAndWait();
-            throw new RuntimeException(e);
+        } else {
+            //Esto si el controlador necesita hacer algo en la ventana principal
+            // Cargar el FXML de la ventana modal
+            FXMLLoader loader =  new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Equipo/modificarEquipo.fxml"));
+            Parent root = null;
+            try {
+                root = loader.load();
+                modalAniadir = new Stage();
+                sceneAniadir = new Scene(root);
+                // Obtener el controlador de la ventana modal
+                ModificarControlador modalControlador = loader.getController();
+
+                // Pasar el TableView al controlador de la ventana modal
+                modalControlador.setTablaEquipo(this.tablaEquipos);
+                Equipo equipo = tablaEquipos.getSelectionModel().getSelectedItem();
+                modalControlador.setE(equipo);
+                modalAniadir.setScene(sceneAniadir);
+                modalAniadir.initModality(Modality.APPLICATION_MODAL);
+                modalAniadir.setTitle("Modificar Equipo");
+                modalAniadir.setResizable(false);
+                modalAniadir.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Equipos/icono.png"))));
+                modalAniadir.showAndWait();
+                equipos = DaoEquipo.cargarListado();
+                tablaEquipos.getItems().setAll(equipos);
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setTitle("FXML");
+                alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
+                alert.showAndWait();
+                throw new RuntimeException(e);
+            }
         }
     }
 
     public void eliminarEquipo(ActionEvent actionEvent) {
+        if(DaoEquipo.eliminarEquipo(tablaEquipos.getSelectionModel().getSelectedItem())){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Eliminado");
+            alert.setContentText("Se ha eliminado el deportista.");
+            alert.showAndWait();
+            equipos = DaoEquipo.cargarListado();
+            tablaEquipos.getItems().setAll(equipos);
+        }
     }
 
     @Override
