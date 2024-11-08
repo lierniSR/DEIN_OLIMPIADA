@@ -79,4 +79,22 @@ public class DaoDeporte {
         }
         return lineas > 0;
     }
+
+    public static boolean eliminarDeporte(Deporte deporte) {
+        int lineas = 0;
+        try {
+            conexion = new ConexionBBDD();
+            String sql = "DELETE FROM deporte WHERE id_deporte = ?";
+            PreparedStatement pstm = conexion.getConexion().prepareStatement(sql);
+            pstm.setInt(1, deporte.getId_deporte());
+            lineas = pstm.executeUpdate();
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("BBDD");
+            alert.setContentText("No se ha podido conectar a la BBDD.");
+            alert.showAndWait();
+        }
+        return lineas > 0;
+    }
 }

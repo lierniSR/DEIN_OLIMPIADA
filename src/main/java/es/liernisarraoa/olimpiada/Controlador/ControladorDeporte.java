@@ -246,6 +246,15 @@ public class ControladorDeporte implements Initializable {
     }
 
     public void eliminarDeporte(ActionEvent actionEvent) {
+        if(DaoDeporte.eliminarDeporte(tablaDeportes.getSelectionModel().getSelectedItem())){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setTitle("Eliminado");
+            alert.setContentText("Se ha eliminado el deporte.");
+            alert.showAndWait();
+            deportes = DaoDeporte.cargarListado();
+            tablaDeportes.getItems().setAll(deportes);
+        }
     }
 
     public void clicar(MouseEvent mouseEvent) {

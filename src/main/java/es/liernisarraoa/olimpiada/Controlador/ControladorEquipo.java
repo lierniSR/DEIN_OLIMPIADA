@@ -251,7 +251,7 @@ public class ControladorEquipo implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
             alert.setTitle("Eliminado");
-            alert.setContentText("Se ha eliminado el deportista.");
+            alert.setContentText("Se ha eliminado el equipo.");
             alert.showAndWait();
             equipos = DaoEquipo.cargarListado();
             tablaEquipos.getItems().setAll(equipos);
