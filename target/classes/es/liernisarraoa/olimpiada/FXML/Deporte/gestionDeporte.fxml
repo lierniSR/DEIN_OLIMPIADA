@@ -59,17 +59,17 @@
       </TableView>
       <HBox layoutX="1.0" layoutY="437.0" prefHeight="65.0" prefWidth="767.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#aniadirEquipo" text="AÑADIR">
+            <Button mnemonicParsing="false" onAction="#aniadirDeporte" text="AÑADIR">
                <HBox.margin>
                   <Insets left="240.0" top="20.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#modificarEquipo" text="MODIFICAR">
+            <Button mnemonicParsing="false" onAction="#modificarDeporte" text="MODIFICAR">
                <HBox.margin>
                   <Insets left="50.0" top="20.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#eliminarEquipo" text="ELIMINAR">
+            <Button mnemonicParsing="false" onAction="#eliminarDeporte" text="ELIMINAR">
                <HBox.margin>
                   <Insets left="50.0" top="20.0" />
                </HBox.margin>

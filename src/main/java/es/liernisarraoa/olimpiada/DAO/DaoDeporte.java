@@ -5,7 +5,9 @@ import es.liernisarraoa.olimpiada.Controlador.ControladorEquipo;
 import es.liernisarraoa.olimpiada.Modelo.Deporte;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,5 +31,30 @@ public class DaoDeporte {
             throw new RuntimeException(e);
         }
         return deportes;
+    }
+
+    public static boolean insertarDeporte(Deporte d) {
+        int lineas = 0;
+        try {
+            conexion = new ConexionBBDD();
+            InputStream inputStream = null;
+            String sql = "INSERT INTO deporte(nombre) VALUES (?)";
+            try {
+                PreparedStatement pstmt = conexion.getConexion().prepareStatement(sql);
+                pstmt.setString(1, d.getNombre());
+
+                lineas = pstmt.executeUpdate();
+                conexion.cerrarConexion();
+            } catch (SQLException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setTitle("SQL");
+                alert.setContentText("No se ha podido ejecutar la sentencia.");
+                alert.showAndWait();
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        return lineas > 0;
     }
 }

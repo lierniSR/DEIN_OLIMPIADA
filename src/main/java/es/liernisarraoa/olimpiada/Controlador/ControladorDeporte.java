@@ -1,5 +1,7 @@
 package es.liernisarraoa.olimpiada.Controlador;
 
+import es.liernisarraoa.olimpiada.Controlador.Deporte.AniadirDeporControlador;
+import es.liernisarraoa.olimpiada.Controlador.Equipo.AniadirEquipoControlador;
 import es.liernisarraoa.olimpiada.DAO.DaoDeporte;
 import es.liernisarraoa.olimpiada.DAO.DaoEquipo;
 import es.liernisarraoa.olimpiada.Modelo.Deporte;
@@ -11,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -18,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,6 +31,10 @@ import java.util.ResourceBundle;
 public class ControladorDeporte implements Initializable {
 
     private Stage stagePrimario;
+    private Scene sceneAniadir;
+    private Stage modalAniadir;
+    private Scene sceneModificar;
+    private Stage modalModificar;
 
     @FXML
     public TextField nombreFiltrar;
@@ -161,13 +169,42 @@ public class ControladorDeporte implements Initializable {
         }
     }
 
-    public void aniadirEquipo(ActionEvent actionEvent) {
+    public void aniadirDeporte(ActionEvent actionEvent) {
+        //Esto si el controlador necesita hacer algo en la ventana principal
+        // Cargar el FXML de la ventana modal
+        FXMLLoader loader =  new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Deporte/aniadirDeporte.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+            modalAniadir = new Stage();
+            sceneAniadir = new Scene(root);
+            // Obtener el controlador de la ventana modal
+            AniadirDeporControlador modalControlador = loader.getController();
+
+            // Pasar el TableView al controlador de la ventana modal
+            modalControlador.setTablaDeporte(this.tablaDeportes);
+            modalAniadir.setScene(sceneAniadir);
+            modalAniadir.initModality(Modality.APPLICATION_MODAL);
+            modalAniadir.setTitle("Agregar Deporte");
+            modalAniadir.setResizable(false);
+            modalAniadir.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Deportes/icono.png"))));
+            modalAniadir.showAndWait();
+            deportes = DaoDeporte.cargarListado();
+            tablaDeportes.getItems().setAll(deportes);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("FXML");
+            alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        }
     }
 
-    public void modificarEquipo(ActionEvent actionEvent) {
+    public void modificarDeporte(ActionEvent actionEvent) {
     }
 
-    public void eliminarEquipo(ActionEvent actionEvent) {
+    public void eliminarDeporte(ActionEvent actionEvent) {
     }
 
     public void clicar(MouseEvent mouseEvent) {
