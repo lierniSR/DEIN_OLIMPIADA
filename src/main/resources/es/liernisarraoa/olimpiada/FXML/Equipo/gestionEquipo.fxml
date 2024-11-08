@@ -16,7 +16,7 @@
 
 <Pane stylesheets="@../../CSS/estilos.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="502.0" prefWidth="767.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.liernisarraoa.olimpiada.Controlador.ControladorEquipo">
    <children>
-      <ImageView fitHeight="502.0" fitWidth="774.0" layoutX="-5.0" pickOnBounds="true">
+      <ImageView onMouseClicked="#clicar" fitHeight="502.0" fitWidth="774.0" layoutX="-5.0" pickOnBounds="true">
          <image>
             <Image url="@../../Imagenes/Equipos/imagen.jpg" />
          </image>

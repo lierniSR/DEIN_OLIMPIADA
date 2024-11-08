@@ -6,13 +6,13 @@ public class Equipo {
 
     private Integer id_equipo;
     private String nombre;
-    private String inciales;
+    private String iniciales;
 
 
     public Equipo(Integer id_equipo, String nombre, String iniciales){
         this.id_equipo = id_equipo;
         this.nombre = nombre;
-        this.inciales = iniciales;
+        this.iniciales = iniciales;
     }
 
     @Override
@@ -20,12 +20,12 @@ public class Equipo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Equipo equipo = (Equipo) o;
-        return Objects.equals(nombre, equipo.nombre) && Objects.equals(inciales, equipo.inciales);
+        return Objects.equals(nombre, equipo.nombre) && Objects.equals(iniciales, equipo.iniciales);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nombre, inciales);
+        return Objects.hash(nombre, iniciales);
     }
 
     public Integer getId_equipo() {
@@ -44,11 +44,11 @@ public class Equipo {
         this.nombre = nombre;
     }
 
-    public String getInciales() {
-        return inciales;
+    public String getIniciales() {
+        return iniciales;
     }
 
-    public void setInciales(String inciales) {
-        this.inciales = inciales;
+    public void setIniciales(String inciales) {
+        this.iniciales = inciales;
     }
 }

@@ -12,3 +12,9 @@
 .table-view .table-row-cell {
     -fx-background-color: rgba(255, 255, 255, 0.7); /* Fondo blanco semi-translúcido para las filas */
 }
+
+/* Estilo para las filas seleccionadas */
+.table-view .table-row-cell:selected {
+    -fx-background-color: blue; /* Color de fondo azul para las filas seleccionadas */
+    -fx-text-fill: white; /* Color de texto blanco para el texto en filas seleccionadas */
+}

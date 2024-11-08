@@ -25,7 +25,7 @@ public class AniadirControladorOlim implements Initializable {
     @FXML
     public TextField anioText;
     @FXML
-    public ChoiceBox seleccionadorTemporada;
+    public ChoiceBox<String> seleccionadorTemporada;
     @FXML
     public TextField ciudadText;
     private TableView<Olimpiada> tablaOlimpiada;

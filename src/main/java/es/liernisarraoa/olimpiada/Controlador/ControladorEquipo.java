@@ -1,5 +1,8 @@
 package es.liernisarraoa.olimpiada.Controlador;
 
+import es.liernisarraoa.olimpiada.Controlador.Equipo.AniadirEquipoControlador;
+import es.liernisarraoa.olimpiada.Controlador.Equipo.ModificarControlador;
+import es.liernisarraoa.olimpiada.Controlador.Olimpiada.AniadirControladorOlim;
 import es.liernisarraoa.olimpiada.DAO.DaoEquipo;
 import es.liernisarraoa.olimpiada.DAO.DaoOlimpiada;
 import es.liernisarraoa.olimpiada.Modelo.Equipo;
@@ -11,12 +14,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -149,9 +155,67 @@ public class ControladorEquipo implements Initializable {
     }
 
     public void aniadirEquipo(ActionEvent actionEvent) {
+        //Esto si el controlador necesita hacer algo en la ventana principal
+        // Cargar el FXML de la ventana modal
+        FXMLLoader loader =  new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Equipo/aniadirEquipo.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+            modalAniadir = new Stage();
+            sceneAniadir = new Scene(root);
+            // Obtener el controlador de la ventana modal
+            AniadirEquipoControlador modalControlador = loader.getController();
+
+            // Pasar el TableView al controlador de la ventana modal
+            modalControlador.setTablaEquipo(this.tablaEquipos);
+            modalAniadir.setScene(sceneAniadir);
+            modalAniadir.initModality(Modality.APPLICATION_MODAL);
+            modalAniadir.setTitle("Agregar Equipo");
+            modalAniadir.setResizable(false);
+            modalAniadir.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Equipos/icono.png"))));
+            modalAniadir.showAndWait();
+            equipos = DaoEquipo.cargarListado();
+            tablaEquipos.getItems().setAll(equipos);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("FXML");
+            alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        }
     }
 
     public void modificarEquipo(ActionEvent actionEvent) {
+        //Esto si el controlador necesita hacer algo en la ventana principal
+        // Cargar el FXML de la ventana modal
+        FXMLLoader loader =  new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Equipo/modificarEquipo.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+            modalAniadir = new Stage();
+            sceneAniadir = new Scene(root);
+            // Obtener el controlador de la ventana modal
+            ModificarControlador modalControlador = loader.getController();
+
+            // Pasar el TableView al controlador de la ventana modal
+            modalControlador.setTablaEquipo(this.tablaEquipos);
+            modalAniadir.setScene(sceneAniadir);
+            modalAniadir.initModality(Modality.APPLICATION_MODAL);
+            modalAniadir.setTitle("Modificar Equipo");
+            modalAniadir.setResizable(false);
+            modalAniadir.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Equipos/icono.png"))));
+            modalAniadir.showAndWait();
+            equipos = DaoEquipo.cargarListado();
+            tablaEquipos.getItems().setAll(equipos);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("FXML");
+            alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        }
     }
 
     public void eliminarEquipo(ActionEvent actionEvent) {
@@ -165,5 +229,9 @@ public class ControladorEquipo implements Initializable {
         columnaIniciales.setCellValueFactory(new PropertyValueFactory<>("iniciales"));
         equipos = DaoEquipo.cargarListado();
         tablaEquipos.getItems().setAll(equipos);
+    }
+
+    public void clicar(MouseEvent mouseEvent) {
+        tablaEquipos.getSelectionModel().clearSelection();
     }
 }

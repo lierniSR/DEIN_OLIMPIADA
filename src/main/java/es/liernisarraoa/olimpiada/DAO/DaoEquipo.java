@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,5 +36,31 @@ public class DaoEquipo {
             alert.showAndWait();
         }
         return equipos;
+    }
+
+    public static boolean insertarEquipo(Equipo e) {
+        int lineas = 0;
+        try {
+            conexion = new ConexionBBDD();
+            InputStream inputStream = null;
+            String sql = "INSERT INTO equipo(nombre, iniciales) VALUES (?,?)";
+            try {
+                PreparedStatement pstmt = conexion.getConexion().prepareStatement(sql);
+                pstmt.setString(1, e.getNombre());
+                pstmt.setString(2, e.getIniciales());
+
+                lineas = pstmt.executeUpdate();
+                conexion.cerrarConexion();
+            } catch (SQLException ex) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setTitle("SQL");
+                alert.setContentText("No se ha podido ejecutar la sentencia.");
+                alert.showAndWait();
+            }
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+        return lineas > 0;
     }
 }

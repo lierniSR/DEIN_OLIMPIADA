@@ -13,6 +13,8 @@ module es.liernisarraoa.olimpiada {
     opens es.liernisarraoa.olimpiada.Controlador.Olimpiada;
     exports es.liernisarraoa.olimpiada.Controlador.Deportista to javafx.fxml;
     opens es.liernisarraoa.olimpiada.Controlador.Deportista;
+    exports es.liernisarraoa.olimpiada.Controlador.Equipo to javafx.fxml;
+    opens es.liernisarraoa.olimpiada.Controlador.Equipo;
     exports es.liernisarraoa.olimpiada.Controlador;
     opens es.liernisarraoa.olimpiada.Controlador to javafx.fxml;
 }
