@@ -26,26 +26,24 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class ControladorDeportista implements Initializable {
+public class ControladorTablaOlimpiada implements Initializable {
     @FXML
     public TextField nombreFiltrar;
     @FXML
-    public TableView<Deportista> tablaDeportistas;
+    public TableView<Olimpiada> tablaDeportistas;
     @FXML
-    public TableColumn<Deportista, Integer> columnaID;
+    public TableColumn<Olimpiada, Integer> columnaID;
     @FXML
-    public TableColumn<Deportista, String> columnaNombre;
+    public TableColumn<Olimpiada, String> columnaNombre;
     @FXML
-    public TableColumn<Deportista, String> columnaSexo;
+    public TableColumn<Olimpiada, String> columnaCiudad;
     @FXML
-    public TableColumn<Deportista, Integer> columnaCM;
+    public TableColumn<Olimpiada, String> columnaTemporada;
     @FXML
-    public TableColumn<Deportista, Integer> columnaKG;
-    @FXML
-    public TableColumn<Deportista, Image> columnaImagen;
+    public TableColumn<Olimpiada, Integer> columnaAnio;
 
     private Stage stagePrimario;
-    private static ObservableList<Deportista> deportistas = FXCollections.observableArrayList();
+    private static ObservableList<Olimpiada> olimpiadas = FXCollections.observableArrayList();
     private Scene sceneAniadir;
     private Stage modalAniadir;
     private Scene sceneModificar;
@@ -93,7 +91,27 @@ public class ControladorDeportista implements Initializable {
     public void cambiarDeporte(ActionEvent actionEvent) {
     }
 
-    public void cambiarOlimpiada(ActionEvent actionEvent) {
+    public void cambiarDeportistas(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(Olimpiada.class.getResource("FXML/gestionDeportista.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load(), 767, 502);
+            stagePrimario.setTitle("Gestion de Deportistas");
+            stagePrimario.getIcons().add(new Image(String.valueOf(Olimpiada.class.getResource("Imagenes/Deportistas/icono.png"))));
+            stagePrimario.setResizable(false);
+            stagePrimario.setScene(scene);
+            stagePrimario.show();
+
+            ControladorDeportista controladorDeportista = fxmlLoader.getController();
+            controladorDeportista.setStage(stagePrimario);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("FXML");
+            alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        }
     }
 
     public void filtrarPorNombre(KeyEvent keyEvent) {

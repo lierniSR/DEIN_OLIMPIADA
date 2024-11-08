@@ -2,6 +2,8 @@ package es.liernisarraoa.olimpiada.Modelo;
 
 import javafx.scene.image.Image;
 
+import java.util.Objects;
+
 public class Deportista {
     private Integer id;
     private String nombre;
@@ -124,5 +126,18 @@ public class Deportista {
      */
     public void setImagen(Image imagen) {
         this.imagen = imagen;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Deportista that = (Deportista) o;
+        return Objects.equals(nombre, that.nombre) && Objects.equals(sexo, that.sexo) && Objects.equals(peso, that.peso) && Objects.equals(altura, that.altura);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombre, sexo, peso, altura);
     }
 }

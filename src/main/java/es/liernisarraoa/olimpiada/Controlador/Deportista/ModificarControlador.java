@@ -19,7 +19,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class AniadirControlador implements Initializable {
+public class ModificarControlador implements Initializable {
     private String errores = "";
     private Image imagen = null;
     private FileChooser ficheroEleccion = new FileChooser();
@@ -43,14 +43,13 @@ public class AniadirControlador implements Initializable {
         imagen = new Image(file.toURI().toString());
     }
 
-    public void guardarDeportista(ActionEvent actionEvent) {
+    public void modificarDeportista(ActionEvent actionEvent) {
         Deportista d = null;
         comprobarErrores();
         if(errores.isEmpty()){
             if(pesoTextField.getText().isEmpty()){
                 if(alturaTextField.getText().isEmpty()){
-                    Integer id = tablaDeportista.getItems().getLast().getId() + 1;
-                    d = new Deportista(id, nombreTextField.getText(), seleccionadorSexo.getValue().toString(), 0,0, imagen);
+                    d = new Deportista(tablaDeportista.getSelectionModel().getSelectedItem().getId(), nombreTextField.getText(), seleccionadorSexo.getValue().toString(), 0,0, imagen);
                     boolean repetido = false;
                     for(Deportista depor : tablaDeportista.getItems()){
                         if(depor.equals(d)){
@@ -59,15 +58,14 @@ public class AniadirControlador implements Initializable {
                         }
                     }
                     if(!repetido){
-                        boolean agregado = DaoDeportista.aniadirDepor(d);
+                        boolean agregado = DaoDeportista.modificarDepor(d);
                         alertaDeporAniadir();
                         ((Stage)nombreTextField.getScene().getWindow()).close();
                     } else {
                         alertaRepetido();
                     }
                 } else {
-                    Integer id = tablaDeportista.getItems().getLast().getId() + 1;
-                    d = new Deportista(id, nombreTextField.getText(), seleccionadorSexo.getValue().toString(), 0, Integer.parseInt(alturaTextField.getText()), imagen);
+                    d = new Deportista(tablaDeportista.getSelectionModel().getSelectedItem().getId(), nombreTextField.getText(), seleccionadorSexo.getValue().toString(), 0, Integer.parseInt(alturaTextField.getText()), imagen);
                     boolean repetido = false;
                     for(Deportista depor : tablaDeportista.getItems()){
                         if(depor.equals(d)){
@@ -76,7 +74,7 @@ public class AniadirControlador implements Initializable {
                         }
                     }
                     if(!repetido){
-                        boolean agregado = DaoDeportista.aniadirDepor(d);
+                        boolean agregado = DaoDeportista.modificarDepor(d);
                         alertaDeporAniadir();
                         ((Stage)nombreTextField.getScene().getWindow()).close();
                     } else {
@@ -85,8 +83,7 @@ public class AniadirControlador implements Initializable {
                 }
             } else {
                 if(alturaTextField.getText().isEmpty()){
-                    Integer id = tablaDeportista.getItems().getLast().getId() + 1;
-                    d = new Deportista(id, nombreTextField.getText(), seleccionadorSexo.getValue().toString(), Integer.parseInt(pesoTextField.getText()),0, imagen);
+                    d = new Deportista(tablaDeportista.getSelectionModel().getSelectedItem().getId(), nombreTextField.getText(), seleccionadorSexo.getValue().toString(), Integer.parseInt(pesoTextField.getText()),0, imagen);
                     boolean repetido = false;
                     for(Deportista depor : tablaDeportista.getItems()){
                         if (depor.equals(d)) {
@@ -95,15 +92,14 @@ public class AniadirControlador implements Initializable {
                         }
                     }
                     if(!repetido){
-                        boolean agregado = DaoDeportista.aniadirDepor(d);
+                        boolean agregado = DaoDeportista.modificarDepor(d);
                         alertaDeporAniadir();
                         ((Stage)nombreTextField.getScene().getWindow()).close();
                     } else {
                         alertaRepetido();
                     }
                 } else {
-                    Integer id = tablaDeportista.getItems().getLast().getId() + 1;
-                    d = new Deportista(id, nombreTextField.getText(), seleccionadorSexo.getValue().toString(), Integer.parseInt(pesoTextField.getText()), Integer.parseInt(alturaTextField.getText()), imagen);
+                    d = new Deportista(tablaDeportista.getSelectionModel().getSelectedItem().getId(), nombreTextField.getText(), seleccionadorSexo.getValue().toString(), Integer.parseInt(pesoTextField.getText()), Integer.parseInt(alturaTextField.getText()), imagen);
                     boolean repetido = false;
                     for(Deportista depor : tablaDeportista.getItems()){
                         if (depor.equals(d)) {
@@ -112,7 +108,7 @@ public class AniadirControlador implements Initializable {
                         }
                     }
                     if(!repetido){
-                        boolean agregado = DaoDeportista.aniadirDepor(d);
+                        boolean agregado = DaoDeportista.modificarDepor(d);
                         alertaDeporAniadir();
                         ((Stage)nombreTextField.getScene().getWindow()).close();
                     } else {
@@ -140,8 +136,8 @@ public class AniadirControlador implements Initializable {
     private void alertaDeporAniadir() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText(null);
-        alert.setTitle("Deportista añadido.");
-        alert.setContentText("Se ha añadido el deportista correctamente.");
+        alert.setTitle("Deportista modificado.");
+        alert.setContentText("Se ha modificado el deportista correctamente.");
         alert.showAndWait();
     }
 
@@ -154,6 +150,12 @@ public class AniadirControlador implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ObservableList<String> opciones = FXCollections.observableArrayList("Femenino", "Masculino");
         seleccionadorSexo.setItems(opciones);
+        if(d != null){
+            nombreTextField.setText(this.d.getNombre());
+            seleccionadorSexo.setValue(this.d.getSexo());
+            pesoTextField.setText(String.valueOf(this.d.getPeso()));
+            alturaTextField.setText(String.valueOf(this.d.getAltura()));
+        }
     }
 
     public void comprobarErrores(){
@@ -189,5 +191,12 @@ public class AniadirControlador implements Initializable {
      */
     public void setTablaPersonas(TableView<Deportista> tabla){
         this.tablaDeportista = tabla;
+    }
+    public void setD(Deportista d){
+        this.d = d;
+        nombreTextField.setText(this.d.getNombre());
+        seleccionadorSexo.setValue(this.d.getSexo());
+        pesoTextField.setText(String.valueOf(this.d.getPeso()));
+        alturaTextField.setText(String.valueOf(this.d.getAltura()));
     }
 }

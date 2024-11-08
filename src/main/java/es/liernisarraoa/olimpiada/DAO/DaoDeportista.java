@@ -60,7 +60,8 @@ public class DaoDeportista {
         return deportistas;
     }
 
-    public static void aniadirDepor(Deportista d){
+    public static boolean aniadirDepor(Deportista d){
+        int lineas = 0;
         try {
             conexion = new ConexionBBDD();
             InputStream inputStream = null;
@@ -95,13 +96,7 @@ public class DaoDeportista {
                         alert.setContentText("No se ha podido convertir la imagen.");
                         alert.showAndWait();
                     }
-                    int lineas = pstmt.executeUpdate();
-                    System.out.println(lineas);
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText(null);
-                    alert.setTitle("Deportista añadido.");
-                    alert.setContentText("Se ha añadido el deportista correctamente.");
-                    alert.showAndWait();
+                    lineas = pstmt.executeUpdate();
                 }
                 conexion.cerrarConexion();
             } catch (SQLException e) {
@@ -114,5 +109,81 @@ public class DaoDeportista {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return lineas > 0;
+    }
+
+    public static boolean modificarDepor(Deportista d){
+        int lineas = 0;
+        try {
+            conexion = new ConexionBBDD();
+            InputStream inputStream = null;
+            String sql = "UPDATE deportista SET nombre = ?, sexo = ?, peso = ?, altura = ?, foto = ? WHERE id_deportista = ?";
+            try {
+                PreparedStatement pstmt = conexion.getConexion().prepareStatement(sql);
+                pstmt.setString(1, d.getNombre());
+                if(d.getSexo().equals("Masculino")){
+                    pstmt.setString(2, "M");
+                } else {
+                    pstmt.setString(2, "F");
+                }
+                pstmt.setInt(3,d.getPeso());
+                pstmt.setInt(4, d.getAltura());
+                if(d.getImagen() != null){
+                    //Convertir Image a BufferedImage
+                    BufferedImage buffered = SwingFXUtils.fromFXImage(d.getImagen(), null);
+
+                    //Escribir Buffered a byteArray
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    try {
+                        ImageIO.write(buffered, "png", baos);
+                        baos.flush();
+
+                        //Convertir ByteArrayOutpuStream a InputStream
+                        inputStream = new ByteArrayInputStream(baos.toByteArray());
+                        pstmt.setBlob(5, inputStream);
+                    } catch (IOException e) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setHeaderText(null);
+                        alert.setTitle("Imagen");
+                        alert.setContentText("No se ha podido convertir la imagen.");
+                        alert.showAndWait();
+                    }
+                    pstmt.setInt(6, d.getId());
+                    lineas = pstmt.executeUpdate();
+                }
+                conexion.cerrarConexion();
+            } catch (SQLException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setTitle("SQL");
+                alert.setContentText("No se ha podido ejecutar la sentencia.");
+                alert.showAndWait();
+            }
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("BBDD");
+            alert.setContentText("No se ha podido conectar a la BBDD.");
+            alert.showAndWait();
+        }
+        return lineas > 0;
+    }
+
+    public static boolean eliminarDeportista(Deportista d){
+        int lineas = 0;
+        try {
+            conexion = new ConexionBBDD();
+            String sql = "DELETE FROM deportista WHERE id_deportista = ?";
+            PreparedStatement pstm = conexion.getConexion().prepareStatement(sql);
+            pstm.setInt(1, d.getId());
+            lineas = pstm.executeUpdate();
+        } catch (SQLException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("BBDD");
+            alert.setContentText("No se ha podido conectar a la BBDD.");
+            alert.showAndWait();
+        }
+        return lineas > 0;
     }
 }
