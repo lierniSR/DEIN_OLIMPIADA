@@ -20,12 +20,12 @@ public class Evento {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Evento evento = (Evento) o;
-        return Objects.equals(nombreEvento, evento.nombreEvento);
+        return Objects.equals(nombreEvento, evento.nombreEvento) && Objects.equals(nombreOlimpiada, evento.nombreOlimpiada) && Objects.equals(nombreDeporte, evento.nombreDeporte);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(nombreEvento);
+        return Objects.hash(nombreEvento, nombreOlimpiada, nombreDeporte);
     }
 
     public Integer getId_evento() {
