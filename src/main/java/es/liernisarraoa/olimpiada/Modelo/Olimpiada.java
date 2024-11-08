@@ -10,6 +10,14 @@ public class Olimpiada {
     private String temporada;
     private String ciudad;
 
+    public Olimpiada (Integer id_olimpiada, String nombre, Integer anio, String temporada, String ciudad){
+        this.id_olimpiada = id_olimpiada;
+        this.nombre = nombre;
+        this.anio = anio;
+        this.temporada = temporada;
+        this.ciudad = ciudad;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

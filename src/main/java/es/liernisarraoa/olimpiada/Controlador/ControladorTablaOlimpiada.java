@@ -1,10 +1,10 @@
 package es.liernisarraoa.olimpiada.Controlador;
 
-import es.liernisarraoa.olimpiada.Controlador.Deportista.AniadirControlador;
-import es.liernisarraoa.olimpiada.Controlador.Deportista.ModificarControlador;
-import es.liernisarraoa.olimpiada.DAO.DaoDeportista;
-import es.liernisarraoa.olimpiada.Modelo.Deportista;
-import es.liernisarraoa.olimpiada.Olimpiada;
+import es.liernisarraoa.olimpiada.Controlador.Olimpiada.AniadirControladorOlim;
+import es.liernisarraoa.olimpiada.Controlador.Olimpiada.ModificarControladorOlim;
+import es.liernisarraoa.olimpiada.DAO.DaoOlimpiada;
+import es.liernisarraoa.olimpiada.Modelo.Olimpiada;
+import es.liernisarraoa.olimpiada.OlimpiadaPrincipal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,13 +16,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -30,7 +31,7 @@ public class ControladorTablaOlimpiada implements Initializable {
     @FXML
     public TextField nombreFiltrar;
     @FXML
-    public TableView<Olimpiada> tablaDeportistas;
+    public TableView<Olimpiada> tablaOlimpiadas;
     @FXML
     public TableColumn<Olimpiada, Integer> columnaID;
     @FXML
@@ -48,6 +49,7 @@ public class ControladorTablaOlimpiada implements Initializable {
     private Stage modalAniadir;
     private Scene sceneModificar;
     private Stage modalModificar;
+    private Olimpiada o;
 
     /**
      * Set para el stage principal
@@ -57,13 +59,13 @@ public class ControladorTablaOlimpiada implements Initializable {
     }
 
     public void cambiarPrincipal(ActionEvent actionEvent) {
-        FXMLLoader fxmlLoader = new FXMLLoader(Olimpiada.class.getResource("FXML/olimpiadasPrincipal.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/olimpiadasPrincipal.fxml"));
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load(), 767, 502);
-            stagePrimario.setTitle("Gestion de olimpiadas");
+            stagePrimario.setTitle("Olimpiadas");
             stagePrimario.getIcons().clear();
-            stagePrimario.getIcons().add(new Image(String.valueOf(Olimpiada.class.getResource("Imagenes/icono.jpg"))));
+            stagePrimario.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/icono.jpg"))));
             stagePrimario.setResizable(false);
             stagePrimario.setScene(scene);
             stagePrimario.show();
@@ -92,12 +94,13 @@ public class ControladorTablaOlimpiada implements Initializable {
     }
 
     public void cambiarDeportistas(ActionEvent actionEvent) {
-        FXMLLoader fxmlLoader = new FXMLLoader(Olimpiada.class.getResource("FXML/gestionDeportista.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/gestionDeportista.fxml"));
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load(), 767, 502);
-            stagePrimario.setTitle("Gestion de Deportistas");
-            stagePrimario.getIcons().add(new Image(String.valueOf(Olimpiada.class.getResource("Imagenes/Deportistas/icono.png"))));
+            stagePrimario.setTitle("Gestion de deportistas");
+            stagePrimario.getIcons().clear();
+            stagePrimario.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Deportistas/icono.png"))));
             stagePrimario.setResizable(false);
             stagePrimario.setScene(scene);
             stagePrimario.show();
@@ -110,52 +113,51 @@ public class ControladorTablaOlimpiada implements Initializable {
             alert.setTitle("FXML");
             alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
             alert.showAndWait();
-            throw new RuntimeException(e);
         }
     }
 
     public void filtrarPorNombre(KeyEvent keyEvent) {
         if(keyEvent.getCode() == KeyCode.ENTER){
             String nombreAFiltrar = nombreFiltrar.getText().trim();
-            ObservableList<Deportista> deporFiltro = FXCollections.observableArrayList();
+            ObservableList<Olimpiada> olimFiltro = FXCollections.observableArrayList();
             if(!nombreAFiltrar.isEmpty()){
-                for(Deportista d : deportistas){
-                    if(d.getNombre().equalsIgnoreCase(nombreAFiltrar)){
-                        deporFiltro.add(d);
+                for(Olimpiada o : olimpiadas){
+                    if(o.getNombre().equalsIgnoreCase(nombreAFiltrar)){
+                        olimFiltro.add(o);
                     }
                 }
                 //Agregamos el observable list y limpiamos la tabla
-                tablaDeportistas.getItems().removeAll();
-                tablaDeportistas.setItems(deporFiltro);
+                tablaOlimpiadas.getItems().removeAll();
+                tablaOlimpiadas.setItems(olimFiltro);
             } else {
-                tablaDeportistas.getItems().removeAll();
-                tablaDeportistas.setItems(deportistas);
+                tablaOlimpiadas.getItems().removeAll();
+                tablaOlimpiadas.setItems(olimpiadas);
             }
         }
     }
 
-    public void aniadirDeportista(ActionEvent actionEvent) {
-        //Esto si el controlador necesita hacer algo en la ventana principal
+    public void aniadirOlimpiada(ActionEvent actionEvent) {
+       //Esto si el controlador necesita hacer algo en la ventana principal
         // Cargar el FXML de la ventana modal
-        FXMLLoader loader = new FXMLLoader(Olimpiada.class.getResource("FXML/aniadirDepor.fxml"));
+        FXMLLoader loader =  new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/aniadirOlim.fxml"));
         Parent root = null;
         try {
             root = loader.load();
             modalAniadir = new Stage();
             sceneAniadir = new Scene(root);
             // Obtener el controlador de la ventana modal
-            AniadirControlador modalControlador = loader.getController();
+            AniadirControladorOlim modalControlador = loader.getController();
 
             // Pasar el TableView al controlador de la ventana modal
-            modalControlador.setTablaPersonas(this.tablaDeportistas);
+            modalControlador.setTablaOlimpiada(this.tablaOlimpiadas);
             modalAniadir.setScene(sceneAniadir);
             modalAniadir.initModality(Modality.APPLICATION_MODAL);
-            modalAniadir.setTitle("Agregar Persona");
+            modalAniadir.setTitle("Agregar Olimpiada");
             modalAniadir.setResizable(false);
-            modalAniadir.getIcons().add(new Image(String.valueOf(Olimpiada.class.getResource("Imagenes/Deportistas/icono.png"))));
+            modalAniadir.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Olimpiadas/icono.png"))));
             modalAniadir.showAndWait();
-            deportistas = DaoDeportista.cargarListado();
-            tablaDeportistas.getItems().setAll(deportistas);
+            olimpiadas = DaoOlimpiada.cargarListado();
+            tablaOlimpiadas.getItems().setAll(olimpiadas);
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
@@ -165,8 +167,8 @@ public class ControladorTablaOlimpiada implements Initializable {
         }
     }
 
-    public void modificarDeportista(ActionEvent actionEvent) {
-        if(tablaDeportistas.getSelectionModel().getSelectedItem() == null){
+    public void modificarOlimpiada(ActionEvent actionEvent) {
+        if(tablaOlimpiadas.getSelectionModel().getSelectedItem() == null){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);
             alert.setTitle("Seleccion");
@@ -175,27 +177,27 @@ public class ControladorTablaOlimpiada implements Initializable {
         } else {
             //Esto si el controlador necesita hacer algo en la ventana principal
             // Cargar el FXML de la ventana modal
-            FXMLLoader loader = new FXMLLoader(Olimpiada.class.getResource("FXML/modificarDepor.fxml"));
+            FXMLLoader loader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/modificarOlimpiada.fxml"));
             Parent root = null;
             try {
                 root = loader.load();
                 modalModificar = new Stage();
                 sceneModificar = new Scene(root);
                 // Obtener el controlador de la ventana modal
-                ModificarControlador modalControlador = loader.getController();
+                ModificarControladorOlim modalControlador = loader.getController();
 
                 // Pasar el TableView al controlador de la ventana modal
-                modalControlador.setTablaPersonas(this.tablaDeportistas);
-                Deportista d = tablaDeportistas.getSelectionModel().getSelectedItem();
-                modalControlador.setD(d);
+                modalControlador.setTablaOlimpiada(this.tablaOlimpiadas);
+                Olimpiada o = tablaOlimpiadas.getSelectionModel().getSelectedItem();
+                modalControlador.setO(o);
                 modalModificar.setScene(sceneModificar);
                 modalModificar.initModality(Modality.APPLICATION_MODAL);
-                modalModificar.setTitle("Modificar Persona");
+                modalModificar.setTitle("Modificar Olimpiada");
                 modalModificar.setResizable(false);
-                modalModificar.getIcons().add(new Image(String.valueOf(Olimpiada.class.getResource("Imagenes/Deportistas/icono.png"))));
+                modalModificar.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Olimpiadas/icono.png"))));
                 modalModificar.showAndWait();
-                deportistas = DaoDeportista.cargarListado();
-                tablaDeportistas.getItems().setAll(deportistas);
+                olimpiadas = DaoOlimpiada.cargarListado();
+                tablaOlimpiadas.getItems().setAll(olimpiadas);
             } catch (IOException e) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setHeaderText(null);
@@ -207,44 +209,26 @@ public class ControladorTablaOlimpiada implements Initializable {
     }
 
     public void eliminarDeportista(ActionEvent actionEvent) {
-        if(DaoDeportista.eliminarDeportista(tablaDeportistas.getSelectionModel().getSelectedItem())){
+        if(DaoOlimpiada.eliminarOlimpiadas(tablaOlimpiadas.getSelectionModel().getSelectedItem())){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setHeaderText(null);
             alert.setTitle("Eliminado");
             alert.setContentText("Se ha eliminado el deportista.");
             alert.showAndWait();
-            deportistas = DaoDeportista.cargarListado();
-            tablaDeportistas.getItems().setAll(deportistas);
+            olimpiadas = DaoOlimpiada.cargarListado();
+            tablaOlimpiadas.getItems().setAll(olimpiadas);
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        tablaDeportistas.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        columnaID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        tablaOlimpiadas.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        columnaID.setCellValueFactory(new PropertyValueFactory<>("id_olimpiada"));
         columnaNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        columnaSexo.setCellValueFactory(new PropertyValueFactory<>("sexo"));
-        columnaKG.setCellValueFactory(new PropertyValueFactory<>("peso"));
-        columnaCM.setCellValueFactory(new PropertyValueFactory<>("altura"));
-        columnaImagen.setCellValueFactory(new PropertyValueFactory<>("imagen"));
-        //Para poder poner una imagen en la tabla
-        columnaImagen.setCellFactory(col -> new TableCell<Deportista, Image>() {
-            private final ImageView imageView = new ImageView();
-
-            @Override
-            protected void updateItem(Image item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setGraphic(null);
-                } else {
-                    imageView.setImage(item);
-                    imageView.setFitWidth(50); // Ajusta el tamaño según sea necesario
-                    imageView.setFitHeight(50);
-                    setGraphic(imageView);
-                }
-            }
-        });
-        deportistas = DaoDeportista.cargarListado();
-        tablaDeportistas.getItems().setAll(deportistas);
+        columnaAnio.setCellValueFactory(new PropertyValueFactory<>("anio"));
+        columnaTemporada.setCellValueFactory(new PropertyValueFactory<>("temporada"));
+        columnaCiudad.setCellValueFactory(new PropertyValueFactory<>("ciudad"));
+        olimpiadas = DaoOlimpiada.cargarListado();
+        tablaOlimpiadas.getItems().setAll(olimpiadas);
     }
 }

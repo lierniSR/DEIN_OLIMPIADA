@@ -4,7 +4,7 @@ import es.liernisarraoa.olimpiada.Controlador.Deportista.AniadirControlador;
 import es.liernisarraoa.olimpiada.Controlador.Deportista.ModificarControlador;
 import es.liernisarraoa.olimpiada.DAO.DaoDeportista;
 import es.liernisarraoa.olimpiada.Modelo.Deportista;
-import es.liernisarraoa.olimpiada.Olimpiada;
+import es.liernisarraoa.olimpiada.OlimpiadaPrincipal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -59,13 +59,13 @@ public class ControladorDeportista implements Initializable {
     }
 
     public void cambiarPrincipal(ActionEvent actionEvent) {
-        FXMLLoader fxmlLoader = new FXMLLoader(Olimpiada.class.getResource("FXML/olimpiadasPrincipal.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/olimpiadasPrincipal.fxml"));
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load(), 767, 502);
-            stagePrimario.setTitle("Gestion de olimpiadas");
+            stagePrimario.setTitle("Olimpiadas");
             stagePrimario.getIcons().clear();
-            stagePrimario.getIcons().add(new Image(String.valueOf(Olimpiada.class.getResource("Imagenes/icono.jpg"))));
+            stagePrimario.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/icono.jpg"))));
             stagePrimario.setResizable(false);
             stagePrimario.setScene(scene);
             stagePrimario.show();
@@ -94,6 +94,26 @@ public class ControladorDeportista implements Initializable {
     }
 
     public void cambiarOlimpiada(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/gestionOlimpiada.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load(), 767, 502);
+            stagePrimario.setTitle("Gestion de Olimpiadas");
+            stagePrimario.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Olimpiadas/icono.png"))));
+            stagePrimario.setResizable(false);
+            stagePrimario.setScene(scene);
+            stagePrimario.show();
+
+            ControladorTablaOlimpiada controladorTablaOlimpiada = fxmlLoader.getController();
+            controladorTablaOlimpiada.setStage(stagePrimario);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("FXML");
+            alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        }
     }
 
     public void filtrarPorNombre(KeyEvent keyEvent) {
@@ -119,7 +139,7 @@ public class ControladorDeportista implements Initializable {
     public void aniadirDeportista(ActionEvent actionEvent) {
         //Esto si el controlador necesita hacer algo en la ventana principal
         // Cargar el FXML de la ventana modal
-        FXMLLoader loader = new FXMLLoader(Olimpiada.class.getResource("FXML/aniadirDepor.fxml"));
+        FXMLLoader loader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/aniadirDepor.fxml"));
         Parent root = null;
         try {
             root = loader.load();
@@ -134,7 +154,7 @@ public class ControladorDeportista implements Initializable {
             modalAniadir.initModality(Modality.APPLICATION_MODAL);
             modalAniadir.setTitle("Agregar Persona");
             modalAniadir.setResizable(false);
-            modalAniadir.getIcons().add(new Image(String.valueOf(Olimpiada.class.getResource("Imagenes/Deportistas/icono.png"))));
+            modalAniadir.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Deportistas/icono.png"))));
             modalAniadir.showAndWait();
             deportistas = DaoDeportista.cargarListado();
             tablaDeportistas.getItems().setAll(deportistas);
@@ -157,7 +177,7 @@ public class ControladorDeportista implements Initializable {
         } else {
             //Esto si el controlador necesita hacer algo en la ventana principal
             // Cargar el FXML de la ventana modal
-            FXMLLoader loader = new FXMLLoader(Olimpiada.class.getResource("FXML/modificarDepor.fxml"));
+            FXMLLoader loader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/modificarDepor.fxml"));
             Parent root = null;
             try {
                 root = loader.load();
@@ -174,7 +194,7 @@ public class ControladorDeportista implements Initializable {
                 modalModificar.initModality(Modality.APPLICATION_MODAL);
                 modalModificar.setTitle("Modificar Persona");
                 modalModificar.setResizable(false);
-                modalModificar.getIcons().add(new Image(String.valueOf(Olimpiada.class.getResource("Imagenes/Deportistas/icono.png"))));
+                modalModificar.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Deportistas/icono.png"))));
                 modalModificar.showAndWait();
                 deportistas = DaoDeportista.cargarListado();
                 tablaDeportistas.getItems().setAll(deportistas);

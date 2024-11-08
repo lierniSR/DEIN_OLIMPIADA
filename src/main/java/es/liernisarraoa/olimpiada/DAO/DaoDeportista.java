@@ -2,7 +2,7 @@ package es.liernisarraoa.olimpiada.DAO;
 
 import es.liernisarraoa.olimpiada.Conexion.ConexionBBDD;
 import es.liernisarraoa.olimpiada.Modelo.Deportista;
-import es.liernisarraoa.olimpiada.Olimpiada;
+import es.liernisarraoa.olimpiada.OlimpiadaPrincipal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -39,7 +39,7 @@ public class DaoDeportista {
                     InputStream input = blob.getBinaryStream();
                     imagen = new Image(input);
                 } else {
-                    imagen = new Image(String.valueOf(Olimpiada.class.getResource("Imagenes/Deportistas/noFoto.png")));
+                    imagen = new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Deportistas/noFoto.png")));
                 }
                 if(resultados.getString(3).equals("M")){
                     sexoString = "Masculino";

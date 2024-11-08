@@ -1,6 +1,6 @@
 package es.liernisarraoa.olimpiada.Controlador;
 
-import es.liernisarraoa.olimpiada.Olimpiada;
+import es.liernisarraoa.olimpiada.OlimpiadaPrincipal;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,12 +26,12 @@ public class ControladorOlimpiada implements Initializable {
     public Label dia;
 
     public void cambiarDeportista(ActionEvent actionEvent) {
-        FXMLLoader fxmlLoader = new FXMLLoader(Olimpiada.class.getResource("FXML/gestionDeportista.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/gestionDeportista.fxml"));
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load(), 767, 502);
             stage.setTitle("Gestion de Deportistas");
-            stage.getIcons().add(new Image(String.valueOf(Olimpiada.class.getResource("Imagenes/Deportistas/icono.png"))));
+            stage.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Deportistas/icono.png"))));
             stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
@@ -44,7 +44,6 @@ public class ControladorOlimpiada implements Initializable {
             alert.setTitle("FXML");
             alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
             alert.showAndWait();
-            throw new RuntimeException(e);
         }
     }
 
@@ -61,18 +60,18 @@ public class ControladorOlimpiada implements Initializable {
     }
 
     public void cambiarOlimpiada(ActionEvent actionEvent) {
-        FXMLLoader fxmlLoader = new FXMLLoader(Olimpiada.class.getResource("FXML/gestionDeportista.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/gestionOlimpiada.fxml"));
         Scene scene = null;
         try {
             scene = new Scene(fxmlLoader.load(), 767, 502);
             stage.setTitle("Gestion de Olimpiadas");
-            stage.getIcons().add(new Image(String.valueOf(Olimpiada.class.getResource("Imagenes/Deportistas/icono.png"))));
+            stage.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Olimpiadas/icono.png"))));
             stage.setResizable(false);
             stage.setScene(scene);
             stage.show();
 
-            ControladorDeportista controladorDeportista = fxmlLoader.getController();
-            controladorDeportista.setStage(stage);
+            ControladorTablaOlimpiada controladorTablaOlimpiada = fxmlLoader.getController();
+            controladorTablaOlimpiada.setStage(stage);
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(null);

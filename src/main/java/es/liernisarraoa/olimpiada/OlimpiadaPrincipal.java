@@ -7,19 +7,18 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.Console;
 import java.io.IOException;
 
-public class Olimpiada extends Application {
+public class OlimpiadaPrincipal extends Application {
     private Stage stagePrimario;
 
     @Override
     public void start(Stage stage) throws IOException {
         this.stagePrimario = stage;
-        FXMLLoader fxmlLoader = new FXMLLoader(Olimpiada.class.getResource("FXML/olimpiadasPrincipal.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/olimpiadasPrincipal.fxml"));
         Scene scene = new Scene(fxmlLoader.load(),767,502);
-        stage.setTitle("Gestion de olimpiadas");
-        stage.getIcons().add(new Image(String.valueOf(Olimpiada.class.getResource("Imagenes/icono.jpg"))));
+        stage.setTitle("Olimpiadas");
+        stage.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/icono.jpg"))));
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
