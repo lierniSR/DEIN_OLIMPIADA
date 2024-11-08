@@ -218,8 +218,8 @@ public class ControladorEquipo implements Initializable {
             Parent root = null;
             try {
                 root = loader.load();
-                modalAniadir = new Stage();
-                sceneAniadir = new Scene(root);
+                modalModificar = new Stage();
+                sceneModificar = new Scene(root);
                 // Obtener el controlador de la ventana modal
                 ModificarControlador modalControlador = loader.getController();
 
@@ -227,12 +227,12 @@ public class ControladorEquipo implements Initializable {
                 modalControlador.setTablaEquipo(this.tablaEquipos);
                 Equipo equipo = tablaEquipos.getSelectionModel().getSelectedItem();
                 modalControlador.setE(equipo);
-                modalAniadir.setScene(sceneAniadir);
-                modalAniadir.initModality(Modality.APPLICATION_MODAL);
-                modalAniadir.setTitle("Modificar Equipo");
-                modalAniadir.setResizable(false);
-                modalAniadir.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Equipos/icono.png"))));
-                modalAniadir.showAndWait();
+                modalModificar.setScene(sceneModificar);
+                modalModificar.initModality(Modality.APPLICATION_MODAL);
+                modalModificar.setTitle("Modificar Equipo");
+                modalModificar.setResizable(false);
+                modalModificar.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Equipos/icono.png"))));
+                modalModificar.showAndWait();
                 equipos = DaoEquipo.cargarListado();
                 tablaEquipos.getItems().setAll(equipos);
             } catch (IOException e) {

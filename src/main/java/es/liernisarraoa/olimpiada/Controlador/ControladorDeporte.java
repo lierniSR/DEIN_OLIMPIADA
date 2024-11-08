@@ -1,33 +1,43 @@
 package es.liernisarraoa.olimpiada.Controlador;
 
+import es.liernisarraoa.olimpiada.DAO.DaoDeporte;
+import es.liernisarraoa.olimpiada.DAO.DaoEquipo;
 import es.liernisarraoa.olimpiada.Modelo.Deporte;
+import es.liernisarraoa.olimpiada.Modelo.Equipo;
 import es.liernisarraoa.olimpiada.OlimpiadaPrincipal;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class ControladorDeporte {
+public class ControladorDeporte implements Initializable {
+
     private Stage stagePrimario;
 
     @FXML
     public TextField nombreFiltrar;
     @FXML
-    public TableView<Deporte> tablaEquipos;
+    public TableView<Deporte> tablaDeportes;
     @FXML
     public TableColumn<Deporte, Integer> columnaID;
     @FXML
     public TableColumn<Deporte, String> columnaNombre;
+
+    private static ObservableList<Deporte> deportes = FXCollections.observableArrayList();
 
     /**
      * Set para el stage principal
@@ -132,6 +142,23 @@ public class ControladorDeporte {
     }
 
     public void filtrarPorNombre(KeyEvent keyEvent) {
+        if(keyEvent.getCode() == KeyCode.ENTER){
+            String nombreAFiltrar = nombreFiltrar.getText().trim();
+            ObservableList<Deporte> deporteFiltro = FXCollections.observableArrayList();
+            if(!nombreAFiltrar.isEmpty()){
+                for(Deporte d : deportes){
+                    if(d.getNombre().equalsIgnoreCase(nombreAFiltrar)){
+                        deporteFiltro.add(d);
+                    }
+                }
+                //Agregamos el observable list y limpiamos la tabla
+                tablaDeportes.getItems().removeAll();
+                tablaDeportes.setItems(deporteFiltro);
+            } else {
+                tablaDeportes.getItems().removeAll();
+                tablaDeportes.setItems(deportes);
+            }
+        }
     }
 
     public void aniadirEquipo(ActionEvent actionEvent) {
@@ -144,6 +171,15 @@ public class ControladorDeporte {
     }
 
     public void clicar(MouseEvent mouseEvent) {
+        tablaDeportes.getSelectionModel().clearSelection();
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        tablaDeportes.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        columnaID.setCellValueFactory(new PropertyValueFactory<>("id_deporte"));
+        columnaNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        deportes = DaoDeporte.cargarListado();
+        tablaDeportes.getItems().setAll(deportes);
+    }
 }
