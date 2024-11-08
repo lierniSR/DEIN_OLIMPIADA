@@ -74,6 +74,25 @@ public class ControladorOlimpiada implements Initializable {
     }
 
     public void cambiarEvento(ActionEvent actionEvent) {
+        FXMLLoader fxmlLoader = new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Evento/gestionEvento.fxml"));
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load(), 767, 502);
+            stage.setTitle("Gestion de Eventos");
+            stage.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Eventos/icono.png"))));
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+
+            ControladorEvento controladorEvento = fxmlLoader.getController();
+            controladorEvento.setStage(stage);
+        } catch (IOException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("FXML");
+            alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
+            alert.showAndWait();
+        }
     }
 
     public void cambiarDeporte(ActionEvent actionEvent) {
