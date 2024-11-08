@@ -1,5 +1,7 @@
 package es.liernisarraoa.olimpiada.Controlador.Deportista;
 
+import es.liernisarraoa.olimpiada.DAO.DaoDeportista;
+import es.liernisarraoa.olimpiada.Modelo.Deportista;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,13 +14,14 @@ import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AniadirControlador implements Initializable {
     private String errores = "";
-    private Image imagen;
-    private FileChooser ficheroEleccion;
+    private Image imagen = null;
+    private FileChooser ficheroEleccion = new FileChooser();
     private static Stage stagePrincipal;
 
     @FXML
@@ -33,19 +36,40 @@ public class AniadirControlador implements Initializable {
     public void seleccionFichero(ActionEvent actionEvent) {
         ficheroEleccion.setTitle("Selecciona un fichero");
         ficheroEleccion.getExtensionFilters().add(new FileChooser.ExtensionFilter("Archivos PNG", "*.png"));
-        imagen = new Image(String.valueOf(ficheroEleccion.showOpenDialog(stagePrincipal)));
+        File file = new File(ficheroEleccion.showOpenDialog(stagePrincipal).getAbsolutePath());
+        imagen = new Image(file.toURI().toString());
     }
 
     public void guardarDeportista(ActionEvent actionEvent) {
+        Deportista d = null;
         comprobarErrores();
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setHeaderText(null);
-        alert.setTitle("Error");
-        alert.setContentText(errores);
-        alert.showAndWait();
+        if(errores.isEmpty()){
+            if(pesoTextField.getText().isEmpty()){
+                if(alturaTextField.getText().isEmpty()){
+                    d = new Deportista(1, nombreTextField.getText(), seleccionadorSexo.getValue().toString(), 0,0, imagen);
+                } else {
+                    d = new Deportista(1, nombreTextField.getText(), seleccionadorSexo.getValue().toString(), 0, Integer.parseInt(alturaTextField.getText()), imagen);
+                }
+            } else {
+                if(alturaTextField.getText().isEmpty()){
+                    d = new Deportista(1, nombreTextField.getText(), seleccionadorSexo.getValue().toString(), Integer.parseInt(pesoTextField.getText()),0, imagen);
+                } else {
+                    d = new Deportista(1, nombreTextField.getText(), seleccionadorSexo.getValue().toString(), Integer.parseInt(pesoTextField.getText()), Integer.parseInt(alturaTextField.getText()), imagen);
+                }
+            }
+            DaoDeportista.aniadirDepor(d);
+            ((Stage)nombreTextField.getScene().getWindow()).close();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("Error");
+            alert.setContentText(errores);
+            alert.showAndWait();
+        }
     }
 
     public void cerrarModal(ActionEvent actionEvent) {
+        ((Stage)nombreTextField.getScene().getWindow()).close();
     }
 
 
@@ -57,8 +81,8 @@ public class AniadirControlador implements Initializable {
 
     public void comprobarErrores(){
         errores = "";
-        if(imagen == null){
-            errores += "No se ha seleccionado ningun archivo.\n";
+        if(ficheroEleccion == null){
+            errores += "Fichero no seleccionado.\n";
         }
         if(nombreTextField.getText().isEmpty()){
             errores += "El campo nombre se encuentra vacío.\n";
@@ -80,9 +104,5 @@ public class AniadirControlador implements Initializable {
                 errores += "El campo peso contiene un caracter.\n";
             }
         }
-    }
-
-    public static void setStagePrincipal(Stage stage){
-        stagePrincipal = stage;
     }
 }

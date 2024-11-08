@@ -111,6 +111,7 @@ public class Deportista {
 
     /**
      * Para recibir la Imagen
+     *
      * @return Integer
      */
     public Image getImagen() {

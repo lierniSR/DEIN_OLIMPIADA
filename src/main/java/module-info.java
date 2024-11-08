@@ -2,6 +2,7 @@ module es.liernisarraoa.olimpiada {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires javafx.swing;
 
 
     opens es.liernisarraoa.olimpiada.Modelo to javafx.fxml;
