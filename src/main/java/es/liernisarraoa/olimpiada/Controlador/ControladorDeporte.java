@@ -1,7 +1,9 @@
 package es.liernisarraoa.olimpiada.Controlador;
 
 import es.liernisarraoa.olimpiada.Controlador.Deporte.AniadirDeporControlador;
+import es.liernisarraoa.olimpiada.Controlador.Deporte.MoidificarDeporControlador;
 import es.liernisarraoa.olimpiada.Controlador.Equipo.AniadirEquipoControlador;
+import es.liernisarraoa.olimpiada.Controlador.Equipo.ModificarControlador;
 import es.liernisarraoa.olimpiada.DAO.DaoDeporte;
 import es.liernisarraoa.olimpiada.DAO.DaoEquipo;
 import es.liernisarraoa.olimpiada.Modelo.Deporte;
@@ -202,6 +204,45 @@ public class ControladorDeporte implements Initializable {
     }
 
     public void modificarDeporte(ActionEvent actionEvent) {
+        if(tablaDeportes.getSelectionModel().getSelectedItem() == null){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(null);
+            alert.setTitle("Seleccion");
+            alert.setContentText("No se ha seleccionado ningun registro.");
+            alert.showAndWait();
+        } else {
+            //Esto si el controlador necesita hacer algo en la ventana principal
+            // Cargar el FXML de la ventana modal
+            FXMLLoader loader =  new FXMLLoader(OlimpiadaPrincipal.class.getResource("FXML/Deporte/modificarDeporte.fxml"));
+            Parent root = null;
+            try {
+                root = loader.load();
+                modalModificar = new Stage();
+                sceneModificar = new Scene(root);
+                // Obtener el controlador de la ventana modal
+                MoidificarDeporControlador modalControlador = loader.getController();
+
+                // Pasar el TableView al controlador de la ventana modal
+                modalControlador.setTablaDeporte(this.tablaDeportes);
+                Deporte deporte = tablaDeportes.getSelectionModel().getSelectedItem();
+                modalControlador.setD(deporte);
+                modalModificar.setScene(sceneModificar);
+                modalModificar.initModality(Modality.APPLICATION_MODAL);
+                modalModificar.setTitle("Modificar Deporte");
+                modalModificar.setResizable(false);
+                modalModificar.getIcons().add(new Image(String.valueOf(OlimpiadaPrincipal.class.getResource("Imagenes/Deportes/icono.png"))));
+                modalModificar.showAndWait();
+                deportes = DaoDeporte.cargarListado();
+                tablaDeportes.getItems().setAll(deportes);
+            } catch (IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText(null);
+                alert.setTitle("FXML");
+                alert.setContentText("El archivo que contiene la visualizacion de la pestaña no se ha podido cargar.");
+                alert.showAndWait();
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void eliminarDeporte(ActionEvent actionEvent) {
